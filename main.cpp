@@ -1,4 +1,4 @@
-
+//**********This is edited code of Mark Nelson STREE2006.CPP - Suffix tree creation************
 //
 // STREE2006.CPP - Suffix tree creation
 //
