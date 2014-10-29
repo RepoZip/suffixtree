@@ -932,4 +932,3 @@ int walk_tree(int start_node, int last_char_so_far) {
         return 0;
 }
 
-
