@@ -1,5 +1,7 @@
-//**********This is edited code of Mark Nelson STREE2006.CPP - Suffix tree creation************
-//
+// Mark Nelson STREE2006.CPP - Suffix tree creation
+// Modified by Team RepoZip for Generalized suffix tree creation of multiple documents
+
+
 // STREE2006.CPP - Suffix tree creation
 //
 // Mark Nelson, updated December, 2006
