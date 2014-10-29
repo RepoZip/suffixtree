@@ -1,7 +1,8 @@
-// Mark Nelson STREE2006.CPP - Suffix tree creation
-// Modified by Team RepoZip for Generalized suffix tree creation of multiple documents
+//********GENERALIZED SUFFIX TREE****************************
 
 
+//**********This is edited code of Mark Nelson STREE2006.CPP - Suffix tree creation************
+//
 // STREE2006.CPP - Suffix tree creation
 //
 // Mark Nelson, updated December, 2006
@@ -106,6 +107,9 @@ public:
 //  are stored in a simple array.
 //
 
+//Modified by daham
+//I have added fields length_from_root,isLeaf,parentNode,termination_label
+
 class Node {
 public:
     int suffix_node;
@@ -173,6 +177,7 @@ void validate();
 int walk_tree(int start_node, int last_char_so_far);
 void store(Suffix active, char string_input[ MAX_LENGTH ]);
 void search(char doc_id);
+void store_eligible_entities();
 
 
 //
@@ -329,13 +334,9 @@ int Edge::SplitEdge(Suffix &s) {
     return new_edge->end_node;
 }
 
-//
-// This routine prints out the contents of the suffix tree
-// at the end of the program by walking through the
-// hash table and printing out all used edges.  It
-// would be really great if I had some code that will
-// print out the tree in a graphical fashion, but I don't!
-//
+//Modified by daham
+//This type objects are ultimately stored in the memory as the
+//resltant tree
 
 class TreeEntity {
 public:
@@ -351,8 +352,15 @@ public:
 
 };
 std::list<char> terminators;
+//Modified by daham
+//Array of Tree Entities
 TreeEntity TreeEntities[MAX_LENGTH * 2];
+//This type of array is ultimately kept
 TreeEntity EligibleEntities[MAX_LENGTH * 2];
+
+
+//Modified by daham
+//Tree Entities are updated by newly added field values
 
 void dump_edges(int current_n) {
 
@@ -547,45 +555,68 @@ int main() {
             << "in this program without meeting this requirement,\n"
             << "but the validation code will flag it as being an\n"
             << "invalid tree\n\n";
-    cout<<"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    cout << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
     Suffix active(0, 0, -1); // The initial active prefix
 
 
-//        for (int x = 0; x < 5; x++) {
-//            for(int j=0;j<11;j++){
-//            string_in[j]='a';
-//            }
-//            string_in[11] = (char) (x+33);
-//            terminators.push_back(string_in[11]);
-//            
-//            cout << "last character for "
-//                    << x
-//                    << " is "
-//                    << string_in[11]
-//                    << " ";
-//    
-//            for (int g = 0; g <= 11; g++) {
-//    
-//                cout << string_in[g];
-//            }
-//            cout << "\n";
-//            store(active,string_in);
-//        }
-    store(active, "aaaaaae$");
-    terminators.push_back('$');
-    store(active, "aaaaaab#");
-    terminators.push_back('#');
-//     store(active, "aaavaaaa^");
-//    terminators.push_back('^');
-//    store(active, "aaaanaaa*");
-//    terminators.push_back('#');
-//     store(active, "haaaaa(");
-//    terminators.push_back('(');
-//    store(active, "gaaaaab-");
-//    terminators.push_back('-');
+
+
+    for (int x = 0; x < 5; x++) {
+        cout << "Enter string: " << flush;
+        for (std::string line; std::getline(std::cin, line);) {
+            
+            if (line.length() == 0) {
+                break;
+            }
+            for (int z = 0; z < line.length(); z++) {
+                string_in[z] = line[z];
+            }
+
+            // strcat(T, line);
+        }
+       
+        string_in[strlen(string_in)] = (char) (x + 33);
+        terminators.push_back((char) (x + 33));
+
+        cout << "last character for "
+                << x
+                << " is "
+                << string_in[11]
+                << " ";
+
+        for (int g = 0; g <= 11; g++) {
+
+            cout << string_in[g];
+        }
+        cout << "\n";
+        store(active, string_in);
+    }
+    //    store(active, "aaaaaae$");
+    //    terminators.push_back('$');
+    //    store(active, "aaaaaax#");
+    //    terminators.push_back('#');
+    //    store(active, "aaaaaai)");
+    //    terminators.push_back(')');
+    //    store(active, "aaaaaap*");
+    //    terminators.push_back('*');
+    //    store(active, "aaaaaak-");
+    //    terminators.push_back('-');
+    //    store(active, "aaaaaam=");
+    //    terminators.push_back('=');
+
+    //:::::::::::::::::::::::::::::::::::::::
+    //     store(active, "aaavaaaa^");
+    //    terminators.push_back('^');
+    //    store(active, "aaaanaaa*");
+    //    terminators.push_back('#');
+    //     store(active, "haaaaa(");
+    //    terminators.push_back('(');
+    //    store(active, "gaaaaab-");
+    //    terminators.push_back('-');
     // store(active,"y");
     dump_edges(N);
-    search('}');
+    store_eligible_entities();
+    search('$');
     //search('$');
     //    while (true) {
     //        cout << "Enter string: " << flush;
@@ -685,19 +716,75 @@ void search(char doc_id) {
     int k;
 
 
+
+    for (int m = 0; m < 100
+            ; m++) {
+        if (Nodes[TreeEntities[m].end_node].isLeaf == 1 && Nodes[TreeEntities[m].end_node].termination_label == doc_id) {
+
+            entity_list.push_back(TreeEntities[m]);
+            cout << ",,,,,,,,,,,,,,,,,,"
+                    << TreeEntities[m].termination_char;
+
+        }
+
+
+    }
+
+    // entity_list.sort();
+    entity_list.sort();
+    TreeEntity entity = entity_list.back();
+    char resultString[MAX_LENGTH];
+    cout << "Here is the VALUE :::::"
+            << entity.depth
+            << " "
+            << entity.end_node
+            << "\n";
+
+    /// Nodes[entity.end_node].parentNode
+    cout << "Here are the strings :";
+    k = entity.end_node;
+    next = TreeEntities[k];
+
+    cout << k
+            << next.sequence;
+    while (k != 0) {
+
+        k = TreeEntities[k].parent;
+        next = TreeEntities[k];
+
+        cout << k
+                << next.sequence;
+    }
+    cout << "\n\n";
+
+}
+
+void store_eligible_entities() {
+
+    TreeEntity next;
+
+
+
+
+    int i;
+    int j = 0;
+    int k;
+
+
     for (std::list<char>::iterator it = terminators.begin(); it != terminators.end(); it++) {
         entity_list.clear();
-        cout<<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII"
-                <<*it
-                <<*it
-                <<"\n";
-        for (int m = 0; m < 100
+        cout << *it
+                <<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIINNNNNN"
+                << *it
+                << *it
+                << "\n";
+        for (int m = 0; m < 1000
                 ; m++) {
             if (Nodes[TreeEntities[m].end_node].isLeaf == 1 && Nodes[TreeEntities[m].end_node].termination_label == *it) {
 
                 entity_list.push_back(TreeEntities[m]);
-                cout<<",,,,,,,,,,,,,,,,,,"
-                        <<TreeEntities[m].termination_char;
+                cout << ",,,,,,,,,,,,,,,,,,"
+                        << TreeEntities[m].termination_char;
 
             }
 
@@ -718,14 +805,14 @@ void search(char doc_id) {
         cout << "Here are the strings :";
         k = entity.end_node;
         next = TreeEntities[k];
-        EligibleEntities[k]=TreeEntities[k];
+        EligibleEntities[k] = TreeEntities[k];
         cout << k
                 << next.sequence;
         while (k != 0) {
 
             k = TreeEntities[k].parent;
             next = TreeEntities[k];
-            EligibleEntities[k]=TreeEntities[k];
+            EligibleEntities[k] = TreeEntities[k];
             cout << k
                     << next.sequence;
         }
@@ -733,79 +820,12 @@ void search(char doc_id) {
 
     }
     int length_final;
-    for(int b=0;b<100;b++){
-        length_final+=EligibleEntities[b].sequence.length();
+    for (int b = 0; b < 100; b++) {
+        length_final += EligibleEntities[b].sequence.length();
     }
-    cout<<"MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:"
-            <<length_final
-            <<"\n";
-    ////////
-
-//    for (int k = 0; k < 100
-//            ; k++) {
-//        if (Nodes[TreeEntities[k].end_node].isLeaf == 1 && Nodes[TreeEntities[k].end_node].termination_label == doc_id) {
-//
-//            entity_list.push_back(TreeEntities[k]);
-//
-//
-//        }
-//
-//
-//    }
-//
-//    // entity_list.sort();
-//    entity_list.sort();
-//    TreeEntity entity = entity_list.back();
-//    char resultString[MAX_LENGTH];
-//    cout << "Here is the VALUE :::::"
-//            << entity.depth
-//            << " "
-//            << entity.end_node
-//            << "\n";
-//
-//    /// Nodes[entity.end_node].parentNode
-//    cout << "Here are the strings :";
-//    k = entity.end_node;
-//    next = TreeEntities[k];
-//    cout << k
-//            << next.sequence;
-//    while (k != 0) {
-//
-//        k = TreeEntities[k].parent;
-//        next = TreeEntities[k];
-//        cout << k
-//                << next.sequence;
-//    }
-//    cout << "\n\n";
-
-    //    for (i = 0; i<sizeof (Nodes); i++) {
-    //        if (Nodes[i].isLeaf == 1 && Nodes[i].termination_label == doc_id) {
-    //            cout << i
-    //
-    //                    ;
-    //            next = Nodes[i];
-    //            k = next.parentNode;
-    //            while (k != 0) {
-    //                k = next.parentNode;
-    //                cout
-    //                        << "--->"
-    //                        << k
-    //                        << "\n";
-    //                next = Nodes[k];
-    //            }
-    //            // required[j]=i;
-    //            j++;
-    //        }
-    //    }
-    cout << sizeof (required)
-            << "HHHHHHHHHHHHHHHHH\n";
-
-    for (i = 0; i<sizeof (required); i++) {
-        cout << required[i]
-                << ",";
-    }
-    cout << "\n";
-
+    cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:"
+            << length_final
+            << "\n";
 }
 
 //
@@ -911,5 +931,4 @@ int walk_tree(int start_node, int last_char_so_far) {
     } else
         return 0;
 }
-
 
