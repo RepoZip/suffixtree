@@ -1,4 +1,4 @@
-//********GENERALIZED SUFFIX TREE Daham****************************
+//********GENERALIZED SUFFIX TREE ****************************
 
 
 //**********This is edited code of Mark Nelson STREE2006.CPP - Suffix tree creation************
@@ -131,8 +131,8 @@ public:
 // are stored in a hash table, whose size is also
 // defined here.
 //
-const int MAX_LENGTH = 1000;
-const int HASH_TABLE_SIZE = 2179; //A prime roughly 10% larger
+const int MAX_LENGTH = 1000000;
+const int HASH_TABLE_SIZE = 21799971; //A prime roughly 10% larger
 
 //
 // This is the hash table where all the currently
@@ -563,18 +563,24 @@ int main() {
 
     for (int x = 0; x < 5; x++) {
         cout << "Enter string: " << flush;
+        int line_length = 0;
         for (std::string line; std::getline(std::cin, line);) {
-            
+
+
             if (line.length() == 0) {
                 break;
             }
-            for (int z = 0; z < line.length(); z++) {
-                string_in[z] = line[z];
-            }
 
+            int count = 0;
+            for (int z = line_length; z < line_length + line.length(); z++) {
+
+                string_in[z] = line[count];
+                count++;
+            }
+            line_length += line.length();
             // strcat(T, line);
         }
-       
+
         string_in[strlen(string_in)] = (char) (x + 33);
         terminators.push_back((char) (x + 33));
 
@@ -717,7 +723,7 @@ void search(char doc_id) {
 
 
 
-    for (int m = 0; m < 100
+    for (int m = 0; m < 1000000
             ; m++) {
         if (Nodes[TreeEntities[m].end_node].isLeaf == 1 && Nodes[TreeEntities[m].end_node].termination_label == doc_id) {
 
@@ -774,11 +780,11 @@ void store_eligible_entities() {
     for (std::list<char>::iterator it = terminators.begin(); it != terminators.end(); it++) {
         entity_list.clear();
         cout << *it
-                <<"IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIINNNNNN"
+                << "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIINNNNNN"
                 << *it
                 << *it
                 << "\n";
-        for (int m = 0; m < 1000
+        for (int m = 0; m < 1000000
                 ; m++) {
             if (Nodes[TreeEntities[m].end_node].isLeaf == 1 && Nodes[TreeEntities[m].end_node].termination_label == *it) {
 
@@ -820,7 +826,7 @@ void store_eligible_entities() {
 
     }
     int length_final;
-    for (int b = 0; b < 100; b++) {
+    for (int b = 0; b < 1000000; b++) {
         length_final += EligibleEntities[b].sequence.length();
     }
     cout << "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:"
