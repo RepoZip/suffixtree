@@ -1,4 +1,7 @@
-//********GENERALIZED SUFFIX TREE ****************************
+
+
+//********GENERALIZED SUFFIX TREE Team RepoZip****************************
+
 
 
 //**********This is edited code of Mark Nelson STREE2006.CPP - Suffix tree creation************
